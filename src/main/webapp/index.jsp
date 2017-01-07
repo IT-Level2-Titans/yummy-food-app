@@ -12,6 +12,7 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/home.css" rel="stylesheet">
 
+
     <!-- Form Validation -->
     <script>
         function validateForm_1() {
@@ -20,9 +21,12 @@
             if (fo == "" ||  ci=="") {
                 alert("ENTER YOUR CHOICE.WE WILL FIND OUT THE SUITABLE RESTAURANTS");
                 return false;
+            }else{
+                document.Form1.action = "http://localhost:8080/test1.jsp"
             }
         }
     </script>
+
 
     <script>
         function validateForm_2() {
@@ -59,9 +63,10 @@
         <div class="navd">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="index.jsp">Home</a></li>
-                <li><a href="RatingHome.jsp">Restaurants</a></li>
+                <li><a href="RatingHome.jsp#AllRestaurants">Restaurants</a></li>
                 <li><a href="path.jsp#sign">Add My Restaurant</a></li>
                 <li><a href="path.jsp">Path</a></li>
+                <li><a href="test1.jsp">TEST</a></li>
 
             </ul>
 
@@ -162,6 +167,7 @@
 
         <!-- /.row -->
         <!-- Portfolio Item Row -->
+
         <a id="row4">
             <div class="row4">
                 <div class="col-md-4">
@@ -170,7 +176,7 @@
                 <div class="col-md-8">
                     <h3>Find Your Favourite Restaurant</h3>
 
-                    <form name="FoodWise" action="http://localhost:8080/rest/hello/FoodWise" method="post" onsubmit="return validateForm_1()">
+                    <form name="FoodWise" action="http://localhost:8080/rest/foodservice/foodWise" method="post" onsubmit="return validateForm_1()">
                         <div class="row">
                             <div class="col-sm-6 col-xs-12 text_field">
                                 <input type="txt" class="form-control" name="fo" placeholder="Enter Food">
@@ -182,7 +188,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 col-xs-12 btn_field">
-                            <input type="submit" value="Search_Restaurants" class="btn btn-danger">
+                            <input type="submit" value="Search_Restaurants" class="btn btn-danger" >
                             <!--<a href="" class="btn btn-danger">Submit</a>-->
                         </div>
                     </form>
@@ -238,7 +244,7 @@
                 <div class="col-md-8">
                     <h3>Find Your Favourite Restaurant</h3>
 
-                    <form name="RestaurantWise" action="http://localhost:8080/rest/hello/RestaurantWise" method="post" onsubmit="return validateForm_2()">
+                    <form name="RestaurantWise" action="http://localhost:8080/rest/foodservice/restaurantWise" method="post" onsubmit="return validateForm_2()">
                         <div class="row">
                             <div class="col-sm-6 col-xs-12 text_field">
                                 <input type="txt" class="form-control" name="res" placeholder="Enter Restaurant Name">
@@ -301,7 +307,7 @@
                 <div class="col-md-8">
                     <h3>Find Your Favourite Restaurant</h3>
 
-                    <form name="LocationWise" action="http://localhost:8080/rest/hello/LocationWise" method="post" onsubmit="return validateForm_3()">
+                    <form name="LocationWise" action="http://localhost:8080/rest/foodservice/locationWise" method="post" onsubmit="return validateForm_3()">
                         <div class="row">
                             <div class="col-sm-6 col-xs-12 text_field">
                                 <input type="txt" class="form-control" name="loc" placeholder="Enter Your Town">

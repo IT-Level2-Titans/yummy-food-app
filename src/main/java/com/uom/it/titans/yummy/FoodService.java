@@ -1,11 +1,16 @@
 package com.uom.it.titans.yummy;
 
 import com.mongodb.*;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
+import com.mongodb.gridfs.GridFSInputFile;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -13,14 +18,17 @@ import java.util.List;
 
 
 //@Path-----this annotation is  containing the desired URL the servlet should listen on.
-@Path("/foodservice")
+@Path("/foodservice")  //hello
 public class FoodService {
 
     /**
      * Test method to see whether web service is working.
+     *
      * @param msg sent as a parameter
      * @return example if msg = hi -> Jersey say : hi
      */
+
+
     @GET
     @Path("/{param}")
     public Response getMsg(@PathParam("param") String msg) {
@@ -34,14 +42,15 @@ public class FoodService {
 
     /**
      * TODO
-     * http://localhost:8080/rest/foodservice/FoodWise/fo=Pizza&ci=Moratuwa
+     * http://localhost:8080/rest/foodservice/foodWise/fo=Pizza&ci=Moratuwa
+     *
      * @param Food_Item
      * @param Current_City
      * @return
      * @throws UnknownHostException
      */
-    @Path("/FoodWise")
-    @POST
+    @Path("/foodWise")
+    @POST                 // http://localhost:8080/rest/hello/message/Pizza/Moratuwa
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response createMessage(@FormParam("fo") String Food_Item, @FormParam("ci") String Current_City) throws UnknownHostException {
 
@@ -93,11 +102,11 @@ public class FoodService {
                 String msg2 = obj2.getString("Restaurant_Name");
 
 
-                URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg1", msg2).build();
+                URI uri = UriBuilder.fromPath("http://localhost:8080/RatingHome.jsp").queryParam("returnmsg1", msg2).build();
                 return Response.seeOther(uri).build();
             } catch (Exception e) {
                 String respond = "Sorry can't find a best restaurant related to your choice";
-                URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg1", respond).build();
+                URI uri = UriBuilder.fromPath("http://localhost:8080/test1.jsp").queryParam("returnmsg1", respond).build();
                 return Response.seeOther(uri).build();
             }
 
@@ -112,11 +121,13 @@ public class FoodService {
 
     /**
      * TODO
+     * http://localhost:8080/rest/foodservice/restaurantWise/res=PizzaHutMoratuwa
+     *
      * @param ResName
      * @return
      * @throws UnknownHostException
      */
-    @Path("/RestaurantWise")
+    @Path("/restaurantWise")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response createMessage2(@FormParam("res") String ResName) throws UnknownHostException {
@@ -160,11 +171,70 @@ public class FoodService {
 
     /**
      * TODO
+     * http://localhost:8080/rest/foodservice/loadallrestaurants
+     *
+     * @return queryOutput=%5BPizzaHutMoratuwa,+Moratuwa,+PizzaHutKatubedda,+Katubedda,+PizzaHutDehiwala,+Dehiwala%5D
+     * @throws UnknownHostException
+     */
+    @Path("/loadallrestaurants")
+    @GET
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response loadAllRestaurants() throws IOException {
+
+
+        MongoClient mongo = new MongoClient("localhost", 27017);
+        DB mydb = mongo.getDB("Titans");
+        DBCollection mycollec = mydb.getCollection("Restaurant");
+
+        BasicDBObject whereQuery = new BasicDBObject();
+        ArrayList<String> queryOutput = new ArrayList<String>(1000);
+
+        int i = 1;
+
+        while (i > 0) {
+
+            String result = "R" + i;
+            // String rname = "R" + i;
+            // String ncity = "C" + i;
+
+            try {
+
+                whereQuery.put("Restaurant_ID", result);
+                DBCursor cursor = mycollec.find(whereQuery);
+                BasicDBObject obj = (BasicDBObject) cursor.next();
+
+                String resname = obj.getString("Restaurant_Name");
+
+                queryOutput.add(resname);
+
+                String nearestcity = obj.getString("NearestCity");
+
+                queryOutput.add(nearestcity);
+                i++;
+
+
+            } catch (Exception e) {
+                break;
+            }
+
+
+        }
+
+
+        URI uri = UriBuilder.fromPath("http://localhost:8080/test1.jsp").queryParam("queryOutput", queryOutput).build();
+        return Response.seeOther(uri).build();
+    }
+
+
+    /**
+     * TODO
+     * http://localhost:8080/rest/foodservice/locationWise/loc=Katubedda
+     *
      * @param ResLoc
      * @return
      * @throws UnknownHostException
      */
-    @Path("/LocationWise")
+    @Path("/locationWise")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response createMessage3(@FormParam("loc") String ResLoc) throws UnknownHostException {
@@ -208,10 +278,13 @@ public class FoodService {
 
     /**
      * TODO
+     *
      * @param msg
      * @return
      * @throws UnknownHostException
      */
+
+
     @GET
     @Path("/mongo/{param}")
     public Response getMongo(@PathParam("param") String msg) throws UnknownHostException {
@@ -225,26 +298,87 @@ public class FoodService {
 
     }
 
-    public static void main(String[] args) throws UnknownHostException {
+    /**
+     * TODO
+     * http://localhost:8080/rest/foodservice/images
+     *
+     * @return
+     * @throws UnknownHostException
+     */
 
-        //To connect to the mongodb server
-        MongoClient mongo = new MongoClient("localhost", 27017);
-        //connect to the database
+    @POST
+    @Path("/images")
+    public Response getMongoImages() throws IOException {
+
+        Mongo mongo = new Mongo("localhost", 27017);
         DB db = mongo.getDB("Titans");
-        //Set<String> tables = db.getCollectionNames();
-        DBCollection table = db.getCollection("Food_Item");
+        DBCollection collection = db.getCollection("DBImageCollection");
 
-		/*DBCursor cursor = table.find();
-        while (cursor.hasNext()) {
-			DBObject obj = cursor.next();
-			System.out.println("Food_Item : " + obj.toString());
-		}*/
+        String newFileName = "R01";
 
-        BasicDBObject doc = new BasicDBObject();
-        doc.put("Food_Item_Id", "4");
-        doc.put("Food_Item_Name", "Hoppers");
-        System.out.println("Document inserted successfully");
-        table.insert(doc);
+        File imageFile = new File("C:\\DBImages\\PizzaHutKatubedda.jpg");
+
+        // create a "photo" namespace
+        GridFS gfsPhoto = new GridFS(db, "photo");
+
+        // get image file from local drive
+        GridFSInputFile gfsFile = gfsPhoto.createFile(imageFile);
+
+        // set a new filename for identify purpose
+        gfsFile.setFilename(newFileName);
+
+        // save the image file into mongoDB
+        gfsFile.save();
+        GridFSDBFile imageForOutput = gfsPhoto.findOne(newFileName);
+        imageForOutput.writeTo("http://localhost:8080/test1.jsp#sign");
+
+        URI uri = UriBuilder.fromPath("http://localhost:8080/test1.jsp").queryParam("returnmsg3", imageForOutput).build();
+        return Response.seeOther(uri).build();
+
+
     }
 
+    //Still use testing purposes
+    public static void main(String[] args) throws UnknownHostException {
+
+        MongoClient mongo = new MongoClient("localhost", 27017);
+        DB mydb = mongo.getDB("Titans");
+        DBCollection mycollec = mydb.getCollection("Restaurant");
+
+        BasicDBObject whereQuery = new BasicDBObject();
+
+        int i = 1;
+        ArrayList<String> queryOutput = new ArrayList<String>(1000);
+
+        while (i > 0) {
+
+            String result = "R" + i;
+            // String rname = "R" + i;
+            // String ncity = "C" + i;
+
+            try {
+
+                whereQuery.put("Restaurant_ID", result);
+                DBCursor cursor = mycollec.find(whereQuery);
+                BasicDBObject obj = (BasicDBObject) cursor.next();
+                String resname = obj.getString("Restaurant_Name");
+                queryOutput.add(resname);
+                String nearestcity = obj.getString("NearestCity");
+                queryOutput.add(nearestcity);
+                i++;
+
+                System.out.print(resname + " " + nearestcity);
+                System.out.println();
+
+            } catch (Exception e) {
+                break;
+            }
+
+        }
+        for (String str : queryOutput) {
+            System.out.println("String = " + str);
+        }
+
+
+    }
 }
