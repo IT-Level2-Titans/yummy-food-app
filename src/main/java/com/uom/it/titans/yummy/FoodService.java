@@ -16,9 +16,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-//@Path-----this annotation is  containing the desired URL the servlet should listen on.
-@Path("/foodservice")  //hello
+/**
+ * Class containing all services related to yummy food app
+ */
+@Path("/foodservice")
 public class FoodService {
 
     /**
@@ -27,17 +28,11 @@ public class FoodService {
      * @param msg sent as a parameter
      * @return example if msg = hi -> Jersey say : hi
      */
-
-
     @GET
     @Path("/{param}")
     public Response getMsg(@PathParam("param") String msg) {
-
-
         String output = "Jersey say : " + msg;
-
         return Response.status(200).entity(output).build();
-
     }
 
     /**
@@ -66,9 +61,8 @@ public class FoodService {
 
             try {
 
-                MongoClient mongo = new MongoClient("localhost", 27017);
-                DB mydb = mongo.getDB("Titans");
-                DBCollection mycollec = mydb.getCollection("Food_Item");
+                DB db = DBConnection.getConnection();
+                DBCollection foodItemCollection = db.getCollection("Food_Item");
 
 
                 BasicDBObject whereQuery = new BasicDBObject();
@@ -77,15 +71,10 @@ public class FoodService {
                 fields.put("Food_Item_Id", 1);  //  1 means only return Food_Item_Id field  .. 0 means return all fields but not this specified field
 
 
-                DBCursor cursor = mycollec.find(whereQuery, fields);  // If we print cursor.next() , It will as a object just like a document not even a string type
+                DBCursor cursor = foodItemCollection.find(whereQuery, fields);  // If we print cursor.next() , It will as a object just like a document not even a string type
 
                 BasicDBObject obj = (BasicDBObject) cursor.next();
                 String msg = obj.getString("Food_Item_Id");  //print only value related to this key in above cursor
-
-
-           /* while (cursor.hasNext()) {
-                System.out.println(cursor.next());
-            }*/
 
                 BasicDBObject whereQuery2 = new BasicDBObject();
 
@@ -94,8 +83,8 @@ public class FoodService {
                 objjj.add(new BasicDBObject("NearestCity", Current_City));
                 whereQuery2.put("$and", objjj);
 
-                DBCollection mycollec2 = mydb.getCollection("Restaurant");
-                DBCursor cursor3 = mycollec2.find(whereQuery2);
+                DBCollection restaurantCollection = db.getCollection("Restaurant");
+                DBCursor cursor3 = restaurantCollection.find(whereQuery2);
 
 
                 BasicDBObject obj2 = (BasicDBObject) cursor3.next();
@@ -137,9 +126,9 @@ public class FoodService {
 
             try {
 
-                MongoClient mongo = new MongoClient("localhost", 27017);
-                DB mydb = mongo.getDB("Titans");
-                DBCollection mycollec = mydb.getCollection("Restaurant");
+                DB db = DBConnection.getConnection();
+
+                DBCollection mycollec = db.getCollection("Restaurant");
 
 
                 BasicDBObject whereQuery = new BasicDBObject();
@@ -182,9 +171,9 @@ public class FoodService {
     public Response loadAllRestaurants() throws IOException {
 
 
-        MongoClient mongo = new MongoClient("localhost", 27017);
-        DB mydb = mongo.getDB("Titans");
-        DBCollection mycollec = mydb.getCollection("Restaurant");
+        DB db = DBConnection.getConnection();
+
+        DBCollection mycollec = db.getCollection("Restaurant");
 
         BasicDBObject whereQuery = new BasicDBObject();
         ArrayList<String> queryOutput = new ArrayList<String>(1000);
@@ -244,9 +233,9 @@ public class FoodService {
 
             try {
 
-                MongoClient mongo = new MongoClient("localhost", 27017);
-                DB mydb = mongo.getDB("Titans");
-                DBCollection mycollec = mydb.getCollection("Restaurant");
+                DB db = DBConnection.getConnection();
+
+                DBCollection mycollec = db.getCollection("Restaurant");
 
 
                 BasicDBObject whereQuery = new BasicDBObject();
@@ -310,8 +299,8 @@ public class FoodService {
     @Path("/images")
     public Response getMongoImages() throws IOException {
 
-        Mongo mongo = new Mongo("localhost", 27017);
-        DB db = mongo.getDB("Titans");
+        DB db = DBConnection.getConnection();
+
         DBCollection collection = db.getCollection("DBImageCollection");
 
         String newFileName = "R01";
@@ -341,9 +330,9 @@ public class FoodService {
     //Still use testing purposes
     public static void main(String[] args) throws UnknownHostException {
 
-        MongoClient mongo = new MongoClient("localhost", 27017);
-        DB mydb = mongo.getDB("Titans");
-        DBCollection mycollec = mydb.getCollection("Restaurant");
+        DB db = DBConnection.getConnection();
+
+        DBCollection mycollec = db.getCollection("Restaurant");
 
         BasicDBObject whereQuery = new BasicDBObject();
 
