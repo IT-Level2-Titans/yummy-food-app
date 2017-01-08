@@ -4,6 +4,7 @@ import com.mongodb.*;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +23,8 @@ import java.util.List;
 @Path("/foodservice")
 public class FoodService {
 
+    final static Logger LOGGER = Logger.getLogger(FoodService.class);
+
     /**
      * Test method to see whether web service is working.
      *
@@ -31,6 +34,7 @@ public class FoodService {
     @GET
     @Path("/{param}")
     public Response getMsg(@PathParam("param") String msg) {
+        LOGGER.info("Food Service Test Method is Called with param : " + msg );
         String output = "Jersey say : " + msg;
         return Response.status(200).entity(output).build();
     }
