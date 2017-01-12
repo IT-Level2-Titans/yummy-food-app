@@ -11,35 +11,35 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     var homeState = {
         name: 'home',
         url: '/home/',
-        templateUrl: 'home.html',
+        templateUrl: 'views/home.html',
         activetab: 'home'
     };
 
     var ratingState = {
         name: 'rating',
         url: '/rating/',
-        templateUrl: 'rating.html',
+        templateUrl: 'views/rating.html',
         activetab: 'rating'
     };
 
     var restaurantState = {
         name: 'restaurant',
         url: '/restaurant',
-        templateUrl: 'restaurant.html',
+        templateUrl: 'views/restaurant.html',
         activetab: 'restaurant'
     };
 
     var pathState = {
         name: 'path',
         url: '/path',
-        templateUrl: 'path.html',
+        templateUrl: 'views/path.html',
         activetab: 'path'
     };
 
     var testState = {
         name: 'test',
         url: '/test/',
-        templateUrl: 'test.html',
+        templateUrl: 'views/test.html',
         activetab: 'test'
     };
 

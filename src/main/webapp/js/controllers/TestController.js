@@ -2,7 +2,7 @@ function TestController($scope, $stateParams, $http) {
     $scope.init = function(){
         $http({
             method: 'GET',
-            url: '/rest/getAllRestaurantsTest'
+            url: '/yummy-food-app/rest/foodservice/getAllRestaurantsTest'
         }).then(function successCallback(response) {
             // this callback will be called asynchronously
             // when the response is available
