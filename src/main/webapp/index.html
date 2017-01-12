@@ -1,0 +1,66 @@
+<!-- public/index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>YUMMY FOOD APP</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/path.css">
+    <link rel="stylesheet" href="css/my_styles1.css">
+    <link rel="stylesheet" href="css/my_styles2.css">
+
+    <!-- JS -->
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-ui-router.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
+
+    <!-- ANGULAR CUSTOM -->
+    <script src="js/controllers/HomeController.js"></script>
+    <script src="js/controllers/RatingController.js"></script>
+    <script src="js/controllers/PathController.js"></script>
+    <script src="js/controllers/RestaurantController.js"></script>
+    <script src="js/controllers/TestController.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<body ng-app="yummy">
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-inverse">
+
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#"><img alt="Brand" src="images/logo1.png" height="40px"></a>
+            <a class="navbar-brand" href="#"><i><b>Yummy</b></i></a>
+        </div>
+        <div class="navd">
+            <ul class="nav navbar-nav">
+                <li ui-sref-active="active"><a class="navbar-item custom-text-hyperlink" ui-sref="home">Home</a></li>
+                <li ui-sref-active="active"><a class="navbar-item custom-text-hyperlink" ui-sref="restaurant">Restaurants</a></li>
+                <li ui-sref-active="active"><a class="navbar-item custom-text-hyperlink" ui-sref="path">Path</a></li>
+                <li ui-sref-active="active"><a class="navbar-item custom-text-hyperlink" ui-sref="rating">Rating</a></li>
+                <li ui-sref-active="active"><a class="navbar-item custom-text-hyperlink" ui-sref="test">Test</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#sign"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="#sign"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container main-content">
+    <!-- ANGULAR DYNAMIC CONTENT -->
+    <ui-view></ui-view>
+
+</div>
+</body>
+</html>

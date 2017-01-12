@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body ng-controller="TestController">
+<div>
+    All restaurants are listed below.
+</div>
+<div>
+    <div ng-repeat="restaurant in restaurants | orderBy: 'restaurant_id' as filtered_result track by restaurant.restaurant_id">
+        {{restaurant.name}}
+    </div>
+</div>
+</body>
+</html>

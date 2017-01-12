@@ -1,44 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Highest Rated Resturents</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="css/my_styles1.css" rel="stylesheet">
-
-
-</head>
-<body>
-<nav class="navbar navbar-inverse">
-
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#"><img alt="Brand" src="images/logo1.png" height="40px"></a>
-            <a class="navbar-brand" href="#"><i><b>YUmmy</b></i></a>
-        </div>
-        <div class="navd">
-            <ul class="nav navbar-nav">
-                <li><a href="index.jsp">Home</a></li>
-                <li class="active"><a href="RatingHome.jsp#AllRestaurants">Restaurants</a></li>
-                <li><a href="path.jsp#sign">Add My Restaurant</a></li>
-                <li><a href="path.jsp">Path</a></li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
-        </div>
-    </div>
-
-
-</nav>
-
-
+<body ng-controller="RatingController">
 <div class="container" >
     <div class="row">
         <div class="col-md-12">
@@ -246,8 +209,5 @@
 </a>
 
 </br>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

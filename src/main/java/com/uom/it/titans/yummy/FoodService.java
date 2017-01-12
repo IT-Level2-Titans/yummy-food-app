@@ -1,9 +1,11 @@
 package com.uom.it.titans.yummy;
 
+import com.google.gson.JsonArray;
 import com.mongodb.*;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
+import com.mongodb.util.JSON;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
@@ -37,6 +39,24 @@ public class FoodService {
         LOGGER.info("Food Service Test Method is Called with param : " + msg );
         String output = "Jersey say : " + msg;
         return Response.status(200).entity(output).build();
+    }
+
+    /**
+     * Test method to get all restaurants from DB.
+     *
+     * @return json with all restaurant data
+     */
+    @GET
+    @Path("getAllRestaurantsTest")
+    public Response getAllRestaurantsTest() throws UnknownHostException {
+        LOGGER.info("Food Service Get All Restaurant Data is Called ");
+        DB db = DBConnection.getConnection();
+        DBCollection restaurantCollection = db.getCollection("Restaurant");
+
+        DBCursor cursor = restaurantCollection.find();
+        JSON json = new JSON();
+        String serialize = json.serialize(cursor);
+        return Response.status(200).entity(serialize).build();
     }
 
     /**
