@@ -1,0 +1,138 @@
+<md-content>
+
+    <div layout="row">
+
+        <!--divide two horizontally-->
+        <div flex>
+            <div layout="column">
+                <div flex>
+                    <h1 class="md-display-2">REGISTER YOUR RESTAURANT HERE</h1>
+
+                </div>
+
+                <div flex>
+                    <h1 class="md-display-1">UPLOAD IMAGE HERE</h1>
+                    <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
+                </div>
+                <!--Upload a photo-->
+                <div flex>
+                    <img src="{{restaurant.image}}" width="100%">
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+        <div flex>
+            <div layout="column">
+                <div flex>
+                    <md-input-container flex>
+                        <label>Restaurant Name</label>
+                        <input required name="RestaurantName" ng-model="restaurant.restaurantName">
+                        <div ng-messages="filters.restaurantName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-input-container flex>
+                        <label>Username</label>
+                        <input required name="Username" ng-model="restaurant.userName">
+                        <div ng-messages="filters.userName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+
+                    <md-input-container flex>
+                        <label>Password</label>
+                        <input required name="Password" ng-model="restaurant.password">
+                        <div ng-messages="filters.password.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+
+                    <md-input-container flex>
+                        <label>Ordering Facility</label>
+                        <input required name="OrderingFacility" ng-model="restaurant.orderingFacility">
+                        <div ng-messages="filters.orderingFacility.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+
+                    <md-input-container flex>
+                        <label>Email</label>
+                        <input required name="Email" ng-model="restaurant.email">
+                        <div ng-messages="filters.email.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+
+                    <md-input-container flex>
+                        <label>Contact Number</label>
+                        <input required name="ContactNumber" ng-model="restaurant.contactNumber">
+                        <div ng-messages="filters.contactNumber.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-input-container flex>
+                        <label>Nearest City</label>
+                        <input required name="NearestCity" ng-model="restaurant.nearestCity">
+                        <div ng-messages="filters.nearestCity.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-input-container flex>
+                        <label>Available Food Items</label>
+                        <input required name="AvailableFoodItems" ng-model="restaurant.availableFoodItems">
+                        <div ng-messages="filters.availableFoodItems.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-input-container flex>
+                        <label>Location</label>
+                        <input type="text" g-places-autocomplete ng-model="restaurant.location" />
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-button ng-click="register()" class="md-raised md-primary">Register</md-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Print search results above dynamically-->
+    <div layout="row">
+        <div ng-repeat="result in resonseResgistration" flex>
+            <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{result}}</span>
+
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-lg card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+
+            </md-card>
+        </div>
+    </div>
+
+
+</md-content>

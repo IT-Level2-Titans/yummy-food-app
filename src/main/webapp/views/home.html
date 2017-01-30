@@ -1,0 +1,143 @@
+
+<md-content  >
+
+
+
+    <!--search restaurants according to the food item name and the current city -->
+    <div layout="row">
+        <div flex> <h1>Search By Favourite Food</h1></div>
+        <div flex>
+            <div layout="column">
+                <div flex>
+                    <md-input-container flex>
+                        <label>Food Name</label>
+                        <input required name="FoodName" ng-model="filters.foodName">
+                        <div ng-messages="filters.foodName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-input-container flex>
+                        <label>City Name</label>
+                        <input required name="CityName" ng-model="filters.location">
+                        <div ng-messages="filters.location.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-button ng-click="searchResults()" class="md-raised md-primary">Search Restuarents</md-button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--Print search results above dynamically-->
+    <div layout="row">
+        <div  ng-repeat="restuarent in restuarents"  flex>
+        <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">{{restuarent.Restaurant_Name}}</span>
+                    <span class="md-subhead">{{restuarent.NearestCity}}</span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <div class="md-media-lg card-media"></div>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button >View Restuarent</md-button >
+                <md-button >View All Restuarents</md-button>
+            </md-card-actions>
+        </md-card>
+        </div>
+    </div>
+
+    <!--search restaurants according to the food_item_name -->
+    <div layout="row">
+        <div flex> <h1>Search By Favourite Restaurant</h1></div>
+        <div flex>
+            <div layout="column">
+                <div flex>
+                    <md-input-container flex>
+                        <label>Restaurant Name</label>
+                        <input required name="RestaurantName" ng-model="filters.restaurantName">
+                        <div ng-messages="filters.restaurantName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-button ng-click="searchResults2()" class="md-raised md-primary">Search Restuarents</md-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Print search results above dynamically-->
+    <div layout="row">
+        <div  ng-repeat="restuarent in restuarents2"  flex>
+            <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{restuarent.Restaurant_Name}}</span>
+                        <span class="md-subhead">{{restuarent.NearestCity}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-lg card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button ng-click="viewRestuarent(restuarent)" >View Restuarent</md-button>
+                    <md-button >View All Restuarents</md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </div>
+
+    <!--search restaurants according to the NearestCity-->
+    <div layout="row">
+        <div flex> <h1>Search By Nearest City</h1></div>
+        <div flex>
+            <div layout="column">
+                <div flex>
+                    <md-input-container flex>
+                        <label>Nearest City</label>
+                        <input required name="NearestCity" ng-model="filters.nearestCity">
+                        <div ng-messages="filters.nearestCity.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-button ng-click="searchResults3()" class="md-raised md-primary">Search Restuarents</md-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Print search results above dynamically-->
+    <div layout="row">
+        <div  ng-repeat="restuarent in restuarents3"  flex>
+            <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{restuarent.Restaurant_Name}}</span>
+                        <span class="md-subhead">{{restuarent.NearestCity}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-lg card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button >View All Restuarents</md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </div>
+
+
+
+
+</md-content>

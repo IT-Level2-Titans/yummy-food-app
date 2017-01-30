@@ -4,12 +4,12 @@ import com.mongodb.*;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
+import com.mongodb.util.JSON;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -34,24 +34,46 @@ public class FoodService {
     @GET
     @Path("/{param}")
     public Response getMsg(@PathParam("param") String msg) {
-        LOGGER.info("Food Service Test Method is Called with param : " + msg );
+        LOGGER.info("Food Service Test Method is Called with param : " + msg);
         String output = "Jersey say : " + msg;
         return Response.status(200).entity(output).build();
     }
 
     /**
-     * TODO
-     * http://localhost:8080/rest/foodservice/foodWise/fo=Pizza&ci=Moratuwa
+     * Test method to get all restaurants from DB.
      *
-     * @param Food_Item
-     * @param Current_City
+     * @return json with all restaurant data
+     */
+    @GET
+    @Path("getAllRestaurantsTest")
+    public Response getAllRestaurantsTest() throws UnknownHostException {
+        LOGGER.info("Food Service Get All Restaurant Data is Called ");
+        DB db = DBConnection.getConnection();
+        DBCollection restaurantCollection = db.getCollection("Restaurant");
+
+        DBCursor cursor = restaurantCollection.find();
+        JSON json = new JSON();
+        String serialize = JSON.serialize(cursor);
+        return Response.status(200).entity(serialize).build();
+    }
+
+    /**
+     * TODO
+     * http://localhost:8080/rest/foodservice/foodWise?fo=Pizza&ci=Moratuwa
+     *
      * @return
      * @throws UnknownHostException
      */
     @Path("/foodWise")
-    @POST                 // http://localhost:8080/rest/hello/message/Pizza/Moratuwa
+    @GET                 // http://localhost:8080/rest/hello/message/Pizza/Moratuwa
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createMessage(@FormParam("fo") String Food_Item, @FormParam("ci") String Current_City) throws UnknownHostException {
+    public Response createMessage(@Context UriInfo ui) throws UnknownHostException {
+
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+
+        String Food_Item = queryParams.get("fo").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String Current_City = queryParams.get("ci").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+
 
         if (Food_Item.trim().length() > 0 && Current_City.trim().length() > 0) {  //trim() returns a string with no leading or trailing white spaces
            /* return Response.created(URI.create("/message/" + String.valueOf(UUID.randomUUID()))).entity(
@@ -91,12 +113,11 @@ public class FoodService {
                 DBCursor cursor3 = restaurantCollection.find(whereQuery2);
 
 
-                BasicDBObject obj2 = (BasicDBObject) cursor3.next();
-                String msg2 = obj2.getString("Restaurant_Name");
+
+                String serialize = JSON.serialize(cursor3);
+                return Response.status(200).entity(serialize).build();
 
 
-                URI uri = UriBuilder.fromPath("http://localhost:8080/RatingHome.jsp").queryParam("returnmsg1", msg2).build();
-                return Response.seeOther(uri).build();
             } catch (Exception e) {
                 String respond = "Sorry can't find a best restaurant related to your choice";
                 URI uri = UriBuilder.fromPath("http://localhost:8080/test1.jsp").queryParam("returnmsg1", respond).build();
@@ -121,9 +142,14 @@ public class FoodService {
      * @throws UnknownHostException
      */
     @Path("/restaurantWise")
-    @POST
+    @GET
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createMessage2(@FormParam("res") String ResName) throws UnknownHostException {
+    public Response createMessage2(@Context UriInfo ui) throws UnknownHostException {
+
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+
+        String ResName = queryParams.get("res").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+
 
         if (ResName.trim().length() > 0) {
 
@@ -137,16 +163,14 @@ public class FoodService {
 
                 BasicDBObject whereQuery = new BasicDBObject();
                 whereQuery.put("Restaurant_Name", ResName);
-                BasicDBObject fields = new BasicDBObject();
-                fields.put("Restaurant_Name", 0);
-
-                DBCursor cursor = mycollec.find(whereQuery, fields);
-                BasicDBObject obj = (BasicDBObject) cursor.next();
-                String msg = obj.getString("OFacility");
+          //      BasicDBObject fields = new BasicDBObject();
+           //     fields.put("Restaurant_Name", 0);
+                DBCursor cursor = mycollec.find(whereQuery);
 
 
-                URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg2", msg).build();
-                return Response.seeOther(uri).build();
+
+                String serialize = JSON.serialize(cursor);
+                return Response.status(200).entity(serialize).build();
             } catch (Exception e) {
                 String respond = "Sorry can't find a best restaurant related to your choice";
                 URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg2", respond).build();
@@ -228,9 +252,14 @@ public class FoodService {
      * @throws UnknownHostException
      */
     @Path("/locationWise")
-    @POST
+    @GET
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createMessage3(@FormParam("loc") String ResLoc) throws UnknownHostException {
+    public Response createMessage3(@Context UriInfo ui) throws UnknownHostException {
+
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+
+        String ResLoc = queryParams.get("loc").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+
 
         if (ResLoc.trim().length() > 0) {
 
@@ -248,12 +277,13 @@ public class FoodService {
                 fields.put("Restaurant_Name", 1);
 
                 DBCursor cursor = mycollec.find(whereQuery, fields);
-                BasicDBObject obj = (BasicDBObject) cursor.next();
-                String msg = obj.getString("Restaurant_Name");
+                ///  BasicDBObject obj = (BasicDBObject) cursor.next();
+                // String msg = obj.getString("Restaurant_Name");
 
 
-                URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg3", msg).build();
-                return Response.seeOther(uri).build();
+                JSON json = new JSON();
+                String serialize = JSON.serialize(cursor);
+                return Response.status(200).entity(serialize).build();
             } catch (Exception e) {
                 String respond = "Sorry can't find a best restaurant related to your choice";
                 URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg3", respond).build();
@@ -287,6 +317,138 @@ public class FoodService {
         //DB db = mongo.getDB("database name");
 
         return Response.status(200).entity(output).build();
+
+
+    }
+
+    @Path("/register")
+    @GET                 // http://localhost:8080/rest/hello/message/Pizza/Moratuwa
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response registerRestaurant(@Context UriInfo ui) throws UnknownHostException {
+
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+
+         String Restaurant_ID ;
+        String Restaurant_Name = queryParams.get("rname").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String RUsername = queryParams.get("uname").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String Password = queryParams.get("pwd").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String OFacility = queryParams.get("ofac").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String Email = queryParams.get("email").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String RContact = queryParams.get("rconta").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String NearestCity = queryParams.get("city").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String AvailableFoodItems = queryParams.get("fooditems").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String Location = queryParams.get("location").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String image = queryParams.get("image").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+
+
+
+        if (Restaurant_Name.trim().length() > 0 && RUsername.trim().length() > 0 && Password.trim().length() > 0 && OFacility.trim().length() > 0 && Email.trim().length() > 0 && RContact.trim().length() > 0 && NearestCity.trim().length() > 0 && AvailableFoodItems.trim().length() > 0 && image.trim().length() > 0) {  //trim() returns a string with no leading or trailing white spaces
+
+            try {
+
+                DB db = DBConnection.getConnection();
+                DBCollection restaurant = db.getCollection("Restaurant");
+                Long i = restaurant.count();
+
+                Restaurant_ID = "R"+Long.toString(i);
+
+                BasicDBObject document = new BasicDBObject();
+
+                document.put("Restaurant_ID", Restaurant_ID);
+                document.put("Restaurant_Name", Restaurant_Name);
+                document.put("RUsername", RUsername);
+                document.put("Password", Password);
+                document.put("OFacility", OFacility);
+                document.put("Email", Email);
+                document.put("RContact", RContact);
+                document.put("NearestCity", NearestCity);
+                document.put("AvailableFoodItems", AvailableFoodItems);
+                document.put("Location", Location);
+                document.put("RImage", image);
+
+
+                restaurant.insert(document);
+
+                String status = "Successfully Registered" + Restaurant_Name;
+
+                return Response.status(200).entity(status).build();
+
+
+            } catch (Exception e) {
+                String status = "Successfully Not Registered " + Restaurant_Name;
+
+                return Response.status(200).entity(status).build();
+            }
+
+
+        }
+
+        String status = "Successfully Not 2 Registered" + Restaurant_Name;
+
+        return Response.status(200).entity(status).build();
+
+
+    }
+
+    //personl account
+
+    @Path("/customerSignUp")
+    @GET                 // http://localhost:8080/rest/hello/message/Pizza/Moratuwa
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response customerSignUp(@Context UriInfo ui) throws UnknownHostException {
+
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+
+        String Customer_ID ;
+        String Customer_Full_Name = queryParams.get("name").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String Contact_Number = queryParams.get("phone").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String Email = queryParams.get("email").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String NIC = queryParams.get("nic").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String Username = queryParams.get("username").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String Passward = queryParams.get("pwd").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+
+
+        if (Customer_Full_Name.trim().length() > 0 && Contact_Number.trim().length() > 0 && Email.trim().length() > 0 && NIC.trim().length() > 0 && Email.trim().length() > 0 && Username.trim().length() > 0 && Passward.trim().length() > 0 ) {  //trim() returns a string with no leading or trailing white spaces
+
+            try {
+
+                DB db = DBConnection.getConnection();
+                DBCollection customer = db.getCollection("Customer");
+                Long i = customer.count();
+
+                Customer_ID = "C"+Long.toString(i);
+
+                BasicDBObject document = new BasicDBObject();
+
+                document.put("Customer_ID", Customer_ID);
+                document.put("Customer_Full_Name", Customer_Full_Name);
+                document.put("Contact_Number", Contact_Number);
+                document.put("Email", Email);
+                document.put("NIC", NIC);
+                document.put("Email", Email);
+                document.put("Username", Username);
+                document.put("Passward", Passward);
+
+
+                customer.insert(document);
+
+                String status = "Successfully Registered" + Customer_Full_Name;
+
+                return Response.status(200).entity(status).build();
+
+
+            } catch (Exception e) {
+                String status = "Successfully Not Registered " + Customer_Full_Name;
+
+                return Response.status(200).entity(status).build();
+            }
+
+
+        }
+
+        String status = "Successfully Not 2 Registered" + Customer_Full_Name;
+
+        return Response.status(200).entity(status).build();
 
 
     }
@@ -334,44 +496,8 @@ public class FoodService {
     //Still use testing purposes
     public static void main(String[] args) throws UnknownHostException {
 
-        DB db = DBConnection.getConnection();
 
-        DBCollection mycollec = db.getCollection("Restaurant");
-
-        BasicDBObject whereQuery = new BasicDBObject();
-
-        int i = 1;
-        ArrayList<String> queryOutput = new ArrayList<String>(1000);
-
-        while (i > 0) {
-
-            String result = "R" + i;
-            // String rname = "R" + i;
-            // String ncity = "C" + i;
-
-            try {
-
-                whereQuery.put("Restaurant_ID", result);
-                DBCursor cursor = mycollec.find(whereQuery);
-                BasicDBObject obj = (BasicDBObject) cursor.next();
-                String resname = obj.getString("Restaurant_Name");
-                queryOutput.add(resname);
-                String nearestcity = obj.getString("NearestCity");
-                queryOutput.add(nearestcity);
-                i++;
-
-                System.out.print(resname + " " + nearestcity);
-                System.out.println();
-
-            } catch (Exception e) {
-                break;
-            }
 
         }
-        for (String str : queryOutput) {
-            System.out.println("String = " + str);
-        }
 
-
-    }
 }
