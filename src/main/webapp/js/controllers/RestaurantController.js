@@ -19,6 +19,13 @@
             });
 
 
+        $scope.viewRestaurant = function (restaurant) {
+
+            $state.go('findus' , {restaurant : restaurant} );
+
+        }
+
+
 
     }
 

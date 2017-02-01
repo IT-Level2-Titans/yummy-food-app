@@ -36,16 +36,16 @@
 
                     <md-input-container md-no-float class="md-block">
                         <md-icon md-svg-src="img/icons/ic_phone_24px.svg"></md-icon>
-                        <input ng-model="user.lgusername" type="text" placeholder="Username">
+                        <input ng-model="user.logusername" type="text" placeholder="Username">
                     </md-input-container>
 
                     <md-input-container md-no-float class="md-block">
                         <md-icon md-svg-src="img/icons/ic_phone_24px.svg"></md-icon>
-                        <input ng-model="user.logpwd" type="text" placeholder="Password">
+                        <input  ng-model="user.logpwd" type="text" placeholder="Password">
                     </md-input-container>
                 </div>
                 <div flex>
-                    <md-button ng-click="login()" class="md-raised md-primary">Log In</md-button>
+                    <md-button ng-click="SignIn()" class="md-raised md-primary">Log In</md-button>
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@
             </md-input-container>
 
             <div flex>
-                <md-button ng-click="customerSignUp()" class="md-raised md-primary">SIGN UP</md-button>
+                <md-button ng-click="SignUp()" class="md-raised md-primary">SIGN UP</md-button>
             </div>
 
 
@@ -135,7 +135,7 @@
     <div flex>
         <md-input-container flex>
             <label>Enter Current Location</label>
-            <input type="text" g-places-autocomplete ng-model="currentLocation"/>
+            <input type="text" g-places-autocomplete ng-model="filters.currentLocation"/>
         </md-input-container>
     </div>
 
@@ -146,7 +146,7 @@
 
     <div style="width: 100%;  height: 100%">
 
-        <ng-map zoom="8" center="{{filters.destination}}" style="height:90%">
+        <ng-map zoom="7" center="{{filters.destination}}" style="height:90%">
             <directions
                     draggable="true"
                     panel="directions-panel"

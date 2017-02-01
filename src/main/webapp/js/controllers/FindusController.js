@@ -28,8 +28,16 @@
             $scope.filters.currentLocation = $scope.currentLocation.formatted_address;
             $scope.filters.destination = $scope.restaurant.Location;
         };
-        $scope.customerSignUp = function () {
+        $scope.SignUp = function () {
             findusService.customerSignUp($scope.filters).then(function (data) {
+
+                $scope.restuarents = data;
+
+            });
+        };
+
+        $scope.SignIn = function () {
+            findusService.customerSignIn($scope.filters).then(function (data) {
 
                 $scope.restuarents = data;
 

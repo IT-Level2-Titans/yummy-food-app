@@ -57,6 +57,7 @@
         }
         // $scope.searchCustomer = function () {
         //     customerSPService.searchCustomers($scope.search).then(function (state) {
+
         //         $scope.allCustomers = state;
         //     });
         // }

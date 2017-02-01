@@ -186,62 +186,6 @@ public class FoodService {
 
     }
 
-    /**
-     * TODO
-     * http://localhost:8080/rest/foodservice/loadallrestaurants
-     *
-     * @return queryOutput=%5BPizzaHutMoratuwa,+Moratuwa,+PizzaHutKatubedda,+Katubedda,+PizzaHutDehiwala,+Dehiwala%5D
-     * @throws UnknownHostException
-     */
-    @Path("/loadallrestaurants")
-    @GET
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response loadAllRestaurants() throws IOException {
-
-
-        DB db = DBConnection.getConnection();
-
-        DBCollection mycollec = db.getCollection("Restaurant");
-
-        BasicDBObject whereQuery = new BasicDBObject();
-        ArrayList<String> queryOutput = new ArrayList<String>(1000);
-
-        int i = 1;
-
-        while (i > 0) {
-
-            String result = "R" + i;
-            // String rname = "R" + i;
-            // String ncity = "C" + i;
-
-            try {
-
-                whereQuery.put("Restaurant_ID", result);
-                DBCursor cursor = mycollec.find(whereQuery);
-                BasicDBObject obj = (BasicDBObject) cursor.next();
-
-                String resname = obj.getString("Restaurant_Name");
-
-                queryOutput.add(resname);
-
-                String nearestcity = obj.getString("NearestCity");
-
-                queryOutput.add(nearestcity);
-                i++;
-
-
-            } catch (Exception e) {
-                break;
-            }
-
-
-        }
-
-
-        URI uri = UriBuilder.fromPath("http://localhost:8080/test1.jsp").queryParam("queryOutput", queryOutput).build();
-        return Response.seeOther(uri).build();
-    }
-
 
     /**
      * TODO
@@ -407,7 +351,6 @@ public class FoodService {
         String Username = queryParams.get("username").toString().replaceAll("\\[", "").replaceAll("\\]", "");
         String Passward = queryParams.get("pwd").toString().replaceAll("\\[", "").replaceAll("\\]", "");
 
-
         if (Customer_Full_Name.trim().length() > 0 && Contact_Number.trim().length() > 0 && Email.trim().length() > 0 && NIC.trim().length() > 0 && Email.trim().length() > 0 && Username.trim().length() > 0 && Passward.trim().length() > 0 ) {  //trim() returns a string with no leading or trailing white spaces
 
             try {
@@ -438,7 +381,7 @@ public class FoodService {
 
 
             } catch (Exception e) {
-                String status = "Successfully Not Registered " + Customer_Full_Name;
+                String status = " Not Registered Try Again " + Customer_Full_Name;
 
                 return Response.status(200).entity(status).build();
             }
@@ -446,52 +389,74 @@ public class FoodService {
 
         }
 
-        String status = "Successfully Not 2 Registered" + Customer_Full_Name;
+        String status = "Please Register" + Customer_Full_Name;
 
         return Response.status(200).entity(status).build();
 
 
     }
 
-    /**
-     * TODO
-     * http://localhost:8080/rest/foodservice/images
-     *
-     * @return
-     * @throws UnknownHostException
-     */
+    //login
+    //personl account
 
-    @POST
-    @Path("/images")
-    public Response getMongoImages() throws IOException {
+    @Path("/customerSignIn")
+    @GET                 // http://localhost:8080/rest/hello/message/Pizza/Moratuwa
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response customerSignIn(@Context UriInfo ui) throws UnknownHostException {
 
-        DB db = DBConnection.getConnection();
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
 
-        DBCollection collection = db.getCollection("DBImageCollection");
 
-        String newFileName = "R01";
+        String username = queryParams.get("cname").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+        String pwd = queryParams.get("pwd").toString().replaceAll("\\[", "").replaceAll("\\]", "");
 
-        File imageFile = new File("C:\\DBImages\\PizzaHutKatubedda.jpg");
+        if (username.trim().length() > 0 && pwd.trim().length() > 0 ) {  //trim() returns a string with no leading or trailing white spaces
 
-        // create a "photo" namespace
-        GridFS gfsPhoto = new GridFS(db, "photo");
+            try {
 
-        // get image file from local drive
-        GridFSInputFile gfsFile = gfsPhoto.createFile(imageFile);
+                DB db = DBConnection.getConnection();
+                DBCollection customer = db.getCollection("Customer");
 
-        // set a new filename for identify purpose
-        gfsFile.setFilename(newFileName);
+                BasicDBObject whereQuery = new BasicDBObject();
+                List<BasicDBObject> upwd = new ArrayList<BasicDBObject>();
+                upwd.add(new BasicDBObject("Username", username));
+                upwd.add(new BasicDBObject("Passward", pwd));
+                whereQuery.put("$and", upwd);
 
-        // save the image file into mongoDB
-        gfsFile.save();
-        GridFSDBFile imageForOutput = gfsPhoto.findOne(newFileName);
-        imageForOutput.writeTo("http://localhost:8080/test1.jsp#sign");
+                DBCursor cursor = customer.find(whereQuery);
+                if(cursor.length()>0){
 
-        URI uri = UriBuilder.fromPath("http://localhost:8080/test1.jsp").queryParam("returnmsg3", imageForOutput).build();
-        return Response.seeOther(uri).build();
+
+                    String status = "You are Sign In :" + username;
+
+                    return Response.status(200).entity(status).build();
+
+                }else{
+                    String status = "Please Sign Up ";
+
+                    return Response.status(200).entity(status).build();
+                }
+
+
+
+            } catch (Exception e) {
+                String status = "Please Sign In .Unless you have an account,you have to Sign Up ";
+
+                return Response.status(200).entity(status).build();
+            }
+
+
+        }
+
+        String status = "Empty fields";
+
+        return Response.status(200).entity(status).build();
 
 
     }
+
+
+
 
     //Still use testing purposes
     public static void main(String[] args) throws UnknownHostException {
