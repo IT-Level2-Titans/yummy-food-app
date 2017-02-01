@@ -54,7 +54,15 @@
 
             $state.go('findus' , {restaurant : restaurant} );
 
-        }
+        };
+
+
+
+        $scope.viewAllRestuarents = function () {
+
+            $state.go('restaurant');
+
+        };
         // $scope.searchCustomer = function () {
         //     customerSPService.searchCustomers($scope.search).then(function (state) {
 

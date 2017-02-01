@@ -76,15 +76,6 @@ public class FoodService {
 
 
         if (Food_Item.trim().length() > 0 && Current_City.trim().length() > 0) {  //trim() returns a string with no leading or trailing white spaces
-           /* return Response.created(URI.create("/message/" + String.valueOf(UUID.randomUUID()))).entity(
-            Food_Item+ "  &  " + Current_City+"...").build() ;
-            */
-
-            // This is a more real world "return"
-            //return Response.created(URI.create("/messages/" + String.valueOf(UUID.randomUUID()))).build();
-
-            //  String message = "FoodItem " + Food_Item + "  CurrentCity " + Current_City;
-
             try {
 
                 DB db = DBConnection.getConnection();

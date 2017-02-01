@@ -46,14 +46,14 @@
                 </md-card-title-media>
             </md-card-title>
             <md-card-actions layout="row" layout-align="end center">
-                <md-button >View Restuarent</md-button >
-                <md-button >View All Restuarents</md-button>
+                <md-button ng-click="viewRestuarent(restuarent)">View Restaurant</md-button >
+                <md-button ng-click="viewAllRestuarents(restuarent)">View All Restaurants</md-button>
             </md-card-actions>
         </md-card>
         </div>
     </div>
 
-    <!--search restaurants according to the food_item_name -->
+    <!--search restaurants according to the restaurant-->
     <div layout="row">
         <div flex> <h1>Search By Favourite Restaurant</h1></div>
         <div flex>
@@ -89,8 +89,8 @@
                     </md-card-title-media>
                 </md-card-title>
                 <md-card-actions layout="row" layout-align="end center">
-                    <md-button ng-click="viewRestuarent(restuarent)" >View Restuarent</md-button>
-                    <md-button >View All Restuarents</md-button>
+                    <md-button ng-click="viewRestuarent(restuarent)" >View Restuarant</md-button>
+                    <md-button ng-click="viewAllRestuarents(restuarent)">View All Restuarants</md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -131,7 +131,8 @@
                     </md-card-title-media>
                 </md-card-title>
                 <md-card-actions layout="row" layout-align="end center">
-                    <md-button >View All Restuarents</md-button>
+                    <md-button ng-click="viewRestuarent(restuarent)">View Restaurant</md-button>
+                    <md-button ng-click="viewAllRestuarents(restuarent)">View All Restaurants</md-button>
                 </md-card-actions>
             </md-card>
         </div>
