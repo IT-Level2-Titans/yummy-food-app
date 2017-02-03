@@ -7,12 +7,12 @@
         .module('yummy')
         .controller('registerController', registerController);
 
-    registerController.$inject = ['$scope', 'registerService'];
+    registerController.$inject = ['$scope', 'registerService' ,'cfpLoadingBar'];
 
 
 
 
-    function registerController($scope , registerService ) {
+    function registerController($scope , registerService , cfpLoadingBar ) {
 
         $scope.register = function () {
             registerService.registerRestaurant($scope.restaurant).then(function (data) {
@@ -21,13 +21,31 @@
 
             });
         };
+        $scope.SignUp = function () {
+            findusService.customerSignUp($scope.filters).then(function (data) {
+
+                $scope.restuarents = data;
+
+            });
+        };
+
+        $scope.SignIn = function () {
+            findusService.customerSignIn($scope.filters).then(function (data) {
+
+                $scope.restuarents = data;
+
+            });
+        };
 
         $scope.uploadFile = function (files) {
-
+            cfpLoadingBar.start();
+            $scope.message = "Uploading Image.....";
             var reader = new FileReader();
             reader.readAsDataURL(files[0]);
             reader.onload = function () {
                 $scope.restaurant = { image : reader.result };
+                cfpLoadingBar.complete();
+                $scope.message = "Uploading Completed";
             };
 
         }

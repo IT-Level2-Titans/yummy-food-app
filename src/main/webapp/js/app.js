@@ -8,8 +8,6 @@ var app = angular.module('yummy', [
     'google.places',
     'ngMap',
     'ngAnimate',
-
-
 ]);
 
 

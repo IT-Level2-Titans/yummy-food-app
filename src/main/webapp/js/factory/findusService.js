@@ -25,19 +25,12 @@
             getRestaurantsByFoodAndCity: getRestaurantsByFoodAndCity,
             getRestaurantsByName: getRestaurantsByName,
             getRestaurantsByLocation: getRestaurantsByLocation,
-            customerSignUp:customerSignUp,
-            customerSignIn:customerSignIn
+
         };
 
         return service;
 
-        function customerSignUp(filters) {
-            return $http.get(webApi + 'foodservice/customerSignUp?cname=' + filters.cname + '&phone=' + filters.phone+ '&email=' + filters.email+ '&nic=' + filters.nic+ '&username=' + filters.username+ '&pwd=' + filters.pwd).then(handleSuccess, handleError('Error getting drivers'));
-        }
 
-        function customerSignIn(filters) {
-            return $http.get(webApi + 'foodservice/customerSignIn?cname=' + filters.logusername + '&pwd=' + filters.logpwd).then(handleSuccess, handleError('Error getting drivers'));
-        }
 
         function getRestaurantsByFoodAndCity(filters) {
             return $http.get(webApi + 'foodservice/foodWise?fo=' + filters.foodName + '&ci=' + filters.location).then(handleSuccess, handleError('Error getting drivers'));

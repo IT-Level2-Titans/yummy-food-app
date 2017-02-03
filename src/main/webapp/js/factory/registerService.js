@@ -16,11 +16,21 @@
 
 
         var service = {
-            registerRestaurant: registerRestaurant
+            registerRestaurant: registerRestaurant,
+            customerSignUp:customerSignUp,
+            customerSignIn:customerSignIn
 
         };
 
         return service;
+
+        function customerSignUp(filters) {
+            return $http.get(webApi + 'foodservice/customerSignUp?cname=' + filters.cname + '&phone=' + filters.phone+ '&email=' + filters.email+ '&nic=' + filters.nic+ '&username=' + filters.username+ '&pwd=' + filters.pwd).then(handleSuccess, handleError('Error getting drivers'));
+        }
+
+        function customerSignIn(filters) {
+            return $http.get(webApi + 'foodservice/customerSignIn?cname=' + filters.logusername + '&pwd=' + filters.logpwd).then(handleSuccess, handleError('Error getting drivers'));
+        }
 
 
         function registerRestaurant(filters) {

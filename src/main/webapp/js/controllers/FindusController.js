@@ -23,26 +23,17 @@
             donation: 19.99
         };
 
+        $scope.filters = {
+            currentLocation : undefined ,
+            destination :undefined
+        }
+
 
         $scope.showPath = function () {
             $scope.filters.currentLocation = $scope.currentLocation.formatted_address;
             $scope.filters.destination = $scope.restaurant.Location;
         };
-        $scope.SignUp = function () {
-            findusService.customerSignUp($scope.filters).then(function (data) {
 
-                $scope.restuarents = data;
-
-            });
-        };
-
-        $scope.SignIn = function () {
-            findusService.customerSignIn($scope.filters).then(function (data) {
-
-                $scope.restuarents = data;
-
-            });
-        };
 
 
     }

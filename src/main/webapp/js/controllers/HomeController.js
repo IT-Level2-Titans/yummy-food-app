@@ -20,6 +20,14 @@
 
     function homeController($scope , homeService , $state ) {
 
+
+
+        $scope.querySearch = function (query) {
+            return homeService.searchRestaurantsByName(query);
+        };
+
+
+
         $scope.searchResults = function () {
             homeService.getRestaurantsByFoodAndCity($scope.filters).then(function (data) {
 
@@ -63,20 +71,7 @@
             $state.go('restaurant');
 
         };
-        // $scope.searchCustomer = function () {
-        //     customerSPService.searchCustomers($scope.search).then(function (state) {
 
-        //         $scope.allCustomers = state;
-        //     });
-        // }
-        //
-        // $scope.viewContract = function (id) {
-        //     $state.go('customerContracts', { id: id });
-        // }
-        //
-        // $scope.adHocTicket = function (id) {
-        //     $state.go('addServiceRequest', { customer: id })
-        // }
     }
 })();
 

@@ -1,21 +1,24 @@
 package com.uom.it.titans.yummy;
 
-import com.mongodb.*;
-import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSDBFile;
-import com.mongodb.gridfs.GridFSInputFile;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.util.JSON;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.*;
+import javax.management.Query;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class containing all services related to yummy food app
@@ -104,7 +107,6 @@ public class FoodService {
                 DBCursor cursor3 = restaurantCollection.find(whereQuery2);
 
 
-
                 String serialize = JSON.serialize(cursor3);
                 return Response.status(200).entity(serialize).build();
 
@@ -154,10 +156,9 @@ public class FoodService {
 
                 BasicDBObject whereQuery = new BasicDBObject();
                 whereQuery.put("Restaurant_Name", ResName);
-          //      BasicDBObject fields = new BasicDBObject();
-           //     fields.put("Restaurant_Name", 0);
+                //      BasicDBObject fields = new BasicDBObject();
+                //     fields.put("Restaurant_Name", 0);
                 DBCursor cursor = mycollec.find(whereQuery);
-
 
 
                 String serialize = JSON.serialize(cursor);
@@ -263,7 +264,7 @@ public class FoodService {
 
         MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
 
-         String Restaurant_ID ;
+        String Restaurant_ID;
         String Restaurant_Name = queryParams.get("rname").toString().replaceAll("\\[", "").replaceAll("\\]", "");
         String RUsername = queryParams.get("uname").toString().replaceAll("\\[", "").replaceAll("\\]", "");
         String Password = queryParams.get("pwd").toString().replaceAll("\\[", "").replaceAll("\\]", "");
@@ -276,7 +277,6 @@ public class FoodService {
         String image = queryParams.get("image").toString().replaceAll("\\[", "").replaceAll("\\]", "");
 
 
-
         if (Restaurant_Name.trim().length() > 0 && RUsername.trim().length() > 0 && Password.trim().length() > 0 && OFacility.trim().length() > 0 && Email.trim().length() > 0 && RContact.trim().length() > 0 && NearestCity.trim().length() > 0 && AvailableFoodItems.trim().length() > 0 && image.trim().length() > 0) {  //trim() returns a string with no leading or trailing white spaces
 
             try {
@@ -285,7 +285,7 @@ public class FoodService {
                 DBCollection restaurant = db.getCollection("Restaurant");
                 Long i = restaurant.count();
 
-                Restaurant_ID = "R"+Long.toString(i);
+                Restaurant_ID = "R" + Long.toString(i);
 
                 BasicDBObject document = new BasicDBObject();
 
@@ -334,7 +334,7 @@ public class FoodService {
 
         MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
 
-        String Customer_ID ;
+        String Customer_ID;
         String Customer_Full_Name = queryParams.get("name").toString().replaceAll("\\[", "").replaceAll("\\]", "");
         String Contact_Number = queryParams.get("phone").toString().replaceAll("\\[", "").replaceAll("\\]", "");
         String Email = queryParams.get("email").toString().replaceAll("\\[", "").replaceAll("\\]", "");
@@ -342,7 +342,7 @@ public class FoodService {
         String Username = queryParams.get("username").toString().replaceAll("\\[", "").replaceAll("\\]", "");
         String Passward = queryParams.get("pwd").toString().replaceAll("\\[", "").replaceAll("\\]", "");
 
-        if (Customer_Full_Name.trim().length() > 0 && Contact_Number.trim().length() > 0 && Email.trim().length() > 0 && NIC.trim().length() > 0 && Email.trim().length() > 0 && Username.trim().length() > 0 && Passward.trim().length() > 0 ) {  //trim() returns a string with no leading or trailing white spaces
+        if (Customer_Full_Name.trim().length() > 0 && Contact_Number.trim().length() > 0 && Email.trim().length() > 0 && NIC.trim().length() > 0 && Email.trim().length() > 0 && Username.trim().length() > 0 && Passward.trim().length() > 0) {  //trim() returns a string with no leading or trailing white spaces
 
             try {
 
@@ -350,7 +350,7 @@ public class FoodService {
                 DBCollection customer = db.getCollection("Customer");
                 Long i = customer.count();
 
-                Customer_ID = "C"+Long.toString(i);
+                Customer_ID = "C" + Long.toString(i);
 
                 BasicDBObject document = new BasicDBObject();
 
@@ -389,7 +389,6 @@ public class FoodService {
 
     //login
     //personl account
-
     @Path("/customerSignIn")
     @GET                 // http://localhost:8080/rest/hello/message/Pizza/Moratuwa
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -401,7 +400,7 @@ public class FoodService {
         String username = queryParams.get("cname").toString().replaceAll("\\[", "").replaceAll("\\]", "");
         String pwd = queryParams.get("pwd").toString().replaceAll("\\[", "").replaceAll("\\]", "");
 
-        if (username.trim().length() > 0 && pwd.trim().length() > 0 ) {  //trim() returns a string with no leading or trailing white spaces
+        if (username.trim().length() > 0 && pwd.trim().length() > 0) {  //trim() returns a string with no leading or trailing white spaces
 
             try {
 
@@ -415,19 +414,18 @@ public class FoodService {
                 whereQuery.put("$and", upwd);
 
                 DBCursor cursor = customer.find(whereQuery);
-                if(cursor.length()>0){
+                if (cursor.length() > 0) {
 
 
                     String status = "You are Sign In :" + username;
 
                     return Response.status(200).entity(status).build();
 
-                }else{
+                } else {
                     String status = "Please Sign Up ";
 
                     return Response.status(200).entity(status).build();
                 }
-
 
 
             } catch (Exception e) {
@@ -447,13 +445,124 @@ public class FoodService {
     }
 
 
+    //auto complete
+
+    @Path("/checkSampleRestaurant")
+    @GET
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response checkSampleRestaurant(@Context UriInfo ui) throws UnknownHostException {
+
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+
+        String letter = queryParams.get("letter").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+
+
+        if (letter.trim().length() > 0) {
+
+
+            try {
+
+                DB db = DBConnection.getConnection();
+
+                DBCollection restaurant = db.getCollection("Restaurant");
+
+
+
+                BasicDBObject searchQuery = new BasicDBObject();
+                searchQuery = new BasicDBObject();
+                searchQuery.put("Restaurant_Name", java.util.regex.Pattern.compile("^"+letter));
+                DBCursor cursor = restaurant.find(searchQuery);
+
+
+                String serialize = JSON.serialize(cursor);
+                return Response.status(200).entity(serialize).build();
+
+            } catch (Exception e) {
+
+
+                String respond = "Sorry can't find a best restaurant related to your choice";
+                URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg2", respond).build();
+                return Response.seeOther(uri).build();
+            }
+
+
+        }
+        String warning = "Please enter your choose.We will find out the best Restaurants";
+        URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg2", warning).build();
+        return Response.seeOther(uri).build();
+
+
+    }
+//auto complete 2
+
+    @Path("/checkSampleFoodItem")
+    @GET
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response checkSampleFoodItem(@Context UriInfo ui) throws UnknownHostException {
+
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+
+        String letter = queryParams.get("letter").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+
+
+        if (letter.trim().length() > 0) {
+
+
+            try {
+
+                DB db = DBConnection.getConnection();
+
+                DBCollection fooditem = db.getCollection("Food_Item");
+
+
+
+                BasicDBObject searchQuery = new BasicDBObject();
+                searchQuery = new BasicDBObject();
+                searchQuery.put("Food_Item_Name", java.util.regex.Pattern.compile("^"+letter));
+                DBCursor cursor = fooditem.find(searchQuery);
+
+
+                String serialize = JSON.serialize(cursor);
+                return Response.status(200).entity(serialize).build();
+
+            } catch (Exception e) {
+
+
+                String respond = "Sorry can't find a best restaurant related to your choice";
+                URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg2", respond).build();
+                return Response.seeOther(uri).build();
+            }
+
+
+        }
+        String warning = "Please enter your choose.We will find out the best Restaurants";
+        URI uri = UriBuilder.fromPath("http://localhost:8080/index.jsp").queryParam("returnmsg2", warning).build();
+        return Response.seeOther(uri).build();
+
+
+    }
 
 
     //Still use testing purposes
     public static void main(String[] args) throws UnknownHostException {
 
+        DB db = DBConnection.getConnection();
 
+        DBCollection restaurant = db.getCollection("Restaurant");
 
+        String[] arr = new String[1000];
+        int i = 0;
+
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery = new BasicDBObject();
+        searchQuery.put("Restaurant_Name", java.util.regex.Pattern.compile("^Pizz"));
+        DBCursor cursor = restaurant.find(searchQuery);
+
+        // loop over the cursor and display the retrieved result
+        while (cursor.hasNext()) {
+            System.out.println(cursor.next());
         }
 
+
+    }
 }

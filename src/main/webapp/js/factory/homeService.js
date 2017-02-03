@@ -15,7 +15,8 @@
         var service = {
             getRestaurantsByFoodAndCity: getRestaurantsByFoodAndCity,
             getRestaurantsByName: getRestaurantsByName,
-            getRestaurantsByLocation: getRestaurantsByLocation
+            getRestaurantsByLocation: getRestaurantsByLocation,
+            searchRestaurantsByName : searchRestaurantsByName
         };
 
         return service;
@@ -39,6 +40,10 @@
         }
         function name2(filters) {
             return $http.get(webApi + 'api/drivers?id=' + driver.id).then(handleSuccess, handleError('Error getting single driver'));
+        }
+
+        function searchRestaurantsByName(name) {
+            return $http.get(webApi + 'foodservice/checkSampleRestaurant?letter=' + name).then(handleSuccess, handleError('Error getting single driver'));
         }
 
 
